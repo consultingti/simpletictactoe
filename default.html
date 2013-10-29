@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+  <head>
+    <meta charset="utf-8">
+    <title>Simple Tic Tac Toe Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="./assets/css/bootstrap.css" rel="stylesheet">
+	<link href="./assets/css/table.css" rel="stylesheet">
+	
+	 <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="./assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="./assets/ico/favicon.png">
+								   
+	
+	<script src="./assets/js/angular.js"></script>
+	<script>
+	  
+     function simpleGameController($scope)
+	 {
+	 $scope.test = "1";
+	 $scope.player="X";
+	 $scope.win = "";
+	 $scope.lost="";
+	 
+	
+	  $scope.row1 =  [{title: 'xod', played: 'false'},
+		               {title: 'xod',played: 'false'},
+					   {title: 'xod',played: 'false'}];
+	  $scope.row2 =  [{title: 'xod',played: 'false'},{title: 'xod',played: 'false'},{title: 'xod',played: 'false'}];
+	  $scope.row3 = [{title: 'xod',played: 'false'},{title: 'xod',played: 'false'},{title: 'xod',played: 'false' }];
+					   
+	   	 
+       $scope.winner = function()
+	   {
+	      var a = [
+		            [$scope.row1[0].title,$scope.row1[1].title, $scope.row1[2].title],
+					[$scope.row2[0].title,$scope.row2[1].title, $scope.row2[2].title],
+					[$scope.row3[0].title,$scope.row3[1].title, $scope.row3[2].title]
+					
+		          ]
+	      var matches = 1;
+	      //check the winner by evaluating who hit 3 in a line (vertical, horizontal, diagonal)
+		  //check horizontal
+		     //a. checking 1st array
+			 //b. checking 2nd array
+			 //c. checking 3rd array
+		   for (var i=0; i< 3;i++)
+		   {
+		     for (var j=0; j<3;j++)
+			 {
+			   if ((matches<=2)&& (j>0))
+			    {
+				  if ((a[i][j-1]==a[i][j])&&(a[i][j-1]!="xod"))
+				  {
+				    matches=matches+1;
+				  }
+				}
+			 }
+			 if (matches<3)
+			      matches=1;
+			 else
+			    { 
+                   $scope.test="winner";
+				   $scope.lost = $scope.player;
+				if ($scope.player=="X")
+					 $scope.win = "O";
+					 else
+					 $scope.win = "X";
+                return "winner";			 		 
+				}
+		   }
+		     
+		  //check vertical
+		  for (var i=0; i< 3;i++)
+		   {
+		     for (var j=0; j<3;j++)
+			 {
+			   if ((matches<=2)&& (j>0))
+			    {
+				  if ((a[j-1][i]==a[j][i])&&(a[j-1][i]!="xod"))
+				  {
+				    matches=matches+1;
+				  }
+				}
+			 }
+			 if (matches<3)
+			      matches=1;
+			 else
+			  {
+			    $scope.test="winner";
+				$scope.lost = $scope.player;
+				if ($scope.player=="X")
+					 $scope.win = "O";
+					 else
+					 $scope.win = "X";
+				
+                return "winner";			 
+			  }
+		   }
+		  //check diagonal
+		  for (var i=0; i< 3;i++)
+		   {
+		    // for (var j=0; j<3;j++)
+			 //{
+			   if ((matches<=2)&& (i>0))
+			    {
+				  if ((a[i-1][i-1]==a[i][i])&&(a[i-1][i-1]!="xod"))
+				  {
+				    matches=matches+1;
+				  }
+				}
+			 //}
+			 if (i==2)
+			 {
+			 if (matches<3)
+			      matches=1;
+			 else
+			  {
+			    $scope.test="winner";
+				$scope.lost = $scope.player;
+				if ($scope.player=="X")
+					 $scope.win = "O";
+					 else
+					 $scope.win = "X";
+                return "winner";			 
+			  }
+			  }
+		   }
+	    if (!($scope.test=="winner"))
+		{
+		 $('#myModal').modal('show');
+		 }
+	   }
+	   
+	 
+	   $scope.clickrow = function(rowCoord)
+	   {
+	     //$scope.row1[0].title="wao";
+		 if (($scope.player.length > 0)&& !($scope.test=="winner"))
+		 {
+		   
+		    if (rowCoord.length >0)
+			{
+				var s = rowCoord.split("");
+			  
+			    if (s[1]=="1")
+				{
+				//row1
+					 if ($scope.row1[parseInt(s[2])-1].title=="xod")
+					 {
+						 $scope.row1[parseInt(s[2])-1].title = $scope.player;  
+						 //turn the value visible by chaging the background to white
+						 $scope.row1[parseInt(s[2])-1].played="true";
+					 }	 
+				}
+				if (s[1]=="2")
+				{
+				//row2
+				 if ($scope.row2[parseInt(s[2])-1].title=="xod")
+					 {
+						 $scope.row2[parseInt(s[2])-1].title = $scope.player;  
+						 //turn the value visible by chaging the background to white
+						 $scope.row2[parseInt(s[2])-1].played="true";
+					 }	 
+				}
+				if (s[1]=="3")
+				{
+				//row3
+				 if ($scope.row3[parseInt(s[2])-1].title=="xod")
+					 {
+						 $scope.row3[parseInt(s[2])-1].title = $scope.player;  
+						 //turn the value visible by chaging the background to white
+						 $scope.row3[parseInt(s[2])-1].played="true";
+					 }	 
+				}
+				
+				  
+				  if ($scope.player=="X")
+					 $scope.player="O";
+					 else
+					 $scope.player="X";
+		    }
+		 }
+		
+		
+	   }
+	   
+	   $scope.userturn = function(turn)
+	   {
+	      if (turn==null)
+		  {
+		     
+		     $('#myModal').modal('show');
+			 
+
+		  }
+	   }
+	   
+		  
+	   
+	   $scope.$watch('player',$scope.winner);
+	 }
+	 
+	 function inigame()
+	 {
+	 //$scope.player="X";
+	     $('#myModal').modal('show');
+	 }
+	 
+	  function restart()
+	   {
+	     location.reload();
+	   }
+	 
+	</script>
+  </head>
+
+  <body ng-controller="simpleGameController" onload="inigame();" >
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Simple Tic Tac Toe</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+             
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <h1>Simple Tic Tac Toe</h1>
+      <p>THis is just a simple example of the game.<br> Introduction to AngularJS and using basic, out-of-the-box BootStrap.</p>
+          <div id="table">
+		  <div id="row1">
+		  <div id="d11" class="cell"><a  style="color:red" href="#" ng-click="clickrow('d11')" ng-class="{playing: row1[0].played == 'true'}">{{row1[0].title}}</a></div>  
+		  <div id="d12" class="cell"><a style="color:red" href="#"  ng-click="clickrow('d12')" ng-class="{playing: row1[1].played == 'true'}">{{row1[1].title}}</a></div> 
+		  <div id="d13" class="cell"><a style="color:red" href="#" ng-click="clickrow('d13')" ng-class="{playing: row1[2].played == 'true'}">{{row1[2].title}}</a></div>
+		  </div>
+		  <div id="row2">
+		  <div id="d21" class="cell"><a style="color:blue" href="#" ng-click="clickrow('d21')" ng-class="{playing: row2[0].played == 'true'}">{{row2[0].title}}</a></div>
+		  <div id="d22" class="cell"><a style="color:blue" href="#" ng-click="clickrow('d22')" ng-class="{playing: row2[1].played == 'true'}">{{row2[1].title}}</a></div>
+		  <div id="d23" class="cell"><a style="color:blue" href="#" ng-click="clickrow('d23')" ng-class="{playing: row2[2].played == 'true'}">{{row2[2].title}}</a></div>
+		  </div>
+		  <div id="row3">
+		  <div id="d31" class="cell"><a style="color:green" href="#" ng-click="clickrow('d31')" ng-class="{playing: row3[0].played == 'true'}">{{row3[0].title}}</a></div>
+		  <div id="d32" class="cell"><a style="color:green" href="#" ng-click="clickrow('d32')" ng-class="{playing: row3[1].played == 'true'}">{{row3[1].title}}</a></div>
+		  <div id="d33" class="cell"><a style="color:green" href="#" ng-click="clickrow('d33')" ng-class="{playing: row3[2].played == 'true'}">{{row3[2].title}}</a></div>
+		  </div>
+		  
+		  </div>
+		  <div id="Simple Board">
+			  <div>Winner: {{win}}</div>
+			  <div>Not Winner:{{lost}}</div>
+		  <div>
+		  <div class="clearGame">
+		 <!-- <input ng-model="test" />-->
+	      	 
+  		  		 
+		  </div>
+		  
+		  
+
+    </div> <!-- /container -->
+
+    <!-- sample modal content -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Simple Game of Tic-Tac-Toe</h4>
+          </div>
+          <div class="modal-body">
+            <h4>Player {{player}}</h4>
+            <p>It is your turn. Place your {{player}}.</p>
+
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="bs-example" style="padding-bottom: 24px;">
+      <a class="btn btn-primary btn-lg" onclick="restart()">Reset the Game</a>
+    </div><!-- /example -->
+	
+	<script src="./assets/js/jquery.js"></script>
+<script src="./assets/js/bootstrap.js"></script>
+
+<script src="http://platform.twitter.com/widgets.js"></script>
+<script src="../assets/js/holder.js"></script>
+
+<script src="../assets/js/application.js"></script>
+	</body>
+	</html>
